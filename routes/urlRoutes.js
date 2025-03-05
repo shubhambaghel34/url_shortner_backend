@@ -1,6 +1,4 @@
-//const express = require("express");
 import express from 'express'
-//const Url = require("../model/url");
 import Url from '../model/url.js';
 import { nanoid } from "nanoid";
 
@@ -10,30 +8,45 @@ const router = express.Router();
 router.post("/shorten", async (req, res) => {
     try {
         const { originalUrl } = req.body;
-        if (!originalUrl) return res.status(400).json({ error: "Original URL is required" });
     
-        const shortUrl = nanoid(6); // ✅ Generate a short URL
+        if (!originalUrl) {
+          return res.status(400).json({ error: "Original URL is required" });
+        }
+    
+        // ✅ Check if the URL already exists in the database
+        const existingUrl = await Url.findOne({ originalUrl });
+        if (existingUrl) {
+          return res.status(200).json(existingUrl); // Return existing short URL
+        }
+    
+        // ✅ Generate a unique short URL
+        const shortUrl = nanoid(6);
         const newUrl = new Url({ originalUrl, shortUrl });
     
         await newUrl.save();
-        res.status(201).json(newUrl);
+        return res.status(201).json(newUrl);
       } catch (error) {
         console.error("Error creating short URL:", error);
-        res.status(500).json({ error: "Server error" });
+        return res.status(500).json({ error: "Server error" });
       }
 });
 
 // Redirect short URL
-router.get("/:shortId", async (req, res) => {
-  const { shortId } = req.params;
+router.get("/:shortUrl", async (req, res) => {
+    try {
+      const { shortUrl } = req.params;
+      const foundUrl = await Url.findOne({ shortUrl });
+  
+      if (!foundUrl) {
+        return res.status(404).json({ error: "Short URL not found" });
+      }
+  
+      // Redirect to original URL
+      res.redirect(foundUrl.originalUrl);
+    } catch (error) {
+      console.error("Error during redirection:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
 
-  const urlData = await Url.findOne({ shortId });
-  if (!urlData) {
-    return res.status(404).json({ error: "URL not found" });
-  }
-
-  res.redirect(urlData.originalUrl);
-});
-
-export default router
-//module.exports = router;
+export default router;
