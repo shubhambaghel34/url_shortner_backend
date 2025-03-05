@@ -5,7 +5,7 @@ A simple URL shortener built with **Node.js, Express, MongoDB, and React**. The 
 ## 🚀 Features
 - Shorten long URLs
 - Redirect to the original URL
-- User-friendly interface
+- User-friendly interface 
 - Fully deployed on Vercel
 
 ## 📂 Project Structure
