@@ -12,5 +12,4 @@ urlSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // Auto-delete exp
 
 const Url = mongoose.model("Url", urlSchema);
 
-
 export default Url;
