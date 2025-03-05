@@ -75,18 +75,7 @@ url-shortener/
    ```
    The frontend will run at `http://localhost:5173`.
 
-## 🌍 Deployment
-### Backend
-The backend is deployed on **Vercel** at:
-```
-https://url-shortner-backend-indol.vercel.app
-```
 
-### Frontend
-The frontend is deployed on **Vercel** at:
-```
-https://url-shortener-frontend-orcin-two.vercel.app
-```
 
 ## 🔄 API Endpoints
 | Method | Endpoint          | Description            |
@@ -94,27 +83,6 @@ https://url-shortener-frontend-orcin-two.vercel.app
 | POST   | `/shorten`       | Shortens a given URL  |
 | GET    | `/:shortUrl`     | Redirects to original |
 
-## 🛠️ Troubleshooting
-### CORS Issues
-Ensure that the backend **CORS settings** allow requests from `http://localhost:5173` during development.
-
-If you encounter CORS errors, update `server.js`:
-```javascript
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://url-shortener-frontend-orcin-two.vercel.app"
-];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
-```
 
 ## 🎯 Future Improvements
 - User authentication
